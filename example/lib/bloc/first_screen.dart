@@ -1,6 +1,6 @@
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:flutter/material.dart';
-
+import 'package:bloc_provider/bloc_provider.dart';
 import 'first_screen_bloc.dart';
 
 class FirstScreen extends StatelessWidget {
@@ -23,7 +23,7 @@ class FirstScreenView extends StatelessWidget {
         body: StreamBuilder<FirstScreenViewState>(
             stream: bloc.viewState,
             builder: (context, snapshot) {
-              if(snapshot.hasData) {
+              if (snapshot.hasData) {
                 final viewState = snapshot.data;
                 return Stack(
                   fit: StackFit.expand,
@@ -41,7 +41,7 @@ class FirstScreenView extends StatelessWidget {
                       left: 20,
                       right: 20,
                       child: TranslationAnimatedWidget(
-                        enabled: viewState.buttonVisible,
+                        enabled: viewState!.buttonVisible,
                         curve: Curves.easeIn,
                         duration: Duration(seconds: 1),
                         values: [
@@ -49,10 +49,13 @@ class FirstScreenView extends StatelessWidget {
                           Offset(0, -50),
                           Offset(0, 0),
                         ],
-                        child: RaisedButton(
-                          elevation: 12,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          color: Colors.white,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 12,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
+                            backgroundColor: Colors.white,
+                          ),
                           onPressed: () {
                             bloc.onDismissClicked();
                           },
@@ -68,13 +71,15 @@ class FirstScreenView extends StatelessWidget {
             }));
   }
 
-  Widget _buildInputButton({Function onClicked}) {
+  Widget _buildInputButton({required Function onClicked}) {
     return Center(
-      child: RaisedButton(
-          onPressed: (){
+      child: ElevatedButton(
+          onPressed: () {
             onClicked();
           },
-          color: Colors.blue,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue,
+          ),
           child: Text(
             "animate",
             style: TextStyle(color: Colors.white),
